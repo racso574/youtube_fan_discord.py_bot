@@ -18,13 +18,9 @@ client = discord.Client()
 client = commands.Bot(command_prefix='pan ')
 client.remove_command('help')
 
-ytvideos = urllib.request.urlopen("https://www.youtube.com/channel/UCI7ktPB6toqucpkkCiolwLg/videos")
+
 ytid = 'UCI7ktPB6toqucpkkCiolwLg'
 playlistid = '&list=PL8mPWv3h4qJcxyNXAINRXEqHF06cc1Euq'
-
-xl = load_workbook('ppyl.xlsx')
-edit = xl['Sheet1']
-video_ids = re.findall(r"watch\?v=(\S{11})", ytvideos.read().decode())
 
 
 @client.event
@@ -45,6 +41,8 @@ async def help(ctx):
 
 @client.command()
 async def fav(ctx):
+    xl = load_workbook('ppyl.xlsx')
+    edit = xl['Sheet1']
     r = [edit.cell(row=i, column=1).value for i in range(1, 15)]
     rd = choice(r)
     await ctx.send(rd)
@@ -52,7 +50,10 @@ async def fav(ctx):
 
 @client.command()
 async def piano(ctx):
-    playlist = urllib.request.urlopen('https://www.youtube.com/watch?v=' + video_ids[0] + playlistid)
+    xl = load_workbook('ppyl.xlsx')
+    edit = xl['Sheet1']
+    c1 = str(edit['b1'].value)
+    playlist = urllib.request.urlopen('https://www.youtube.com/watch?v=' + c1 + playlistid)
     video_idsplus = re.findall(r"watch\?v=(\S{11})", playlist.read().decode())
     rd = choice(video_idsplus)
     r = ("https://www.youtube.com/watch?v=" + rd)
@@ -71,15 +72,21 @@ async def piano(ctx):
 
 @client.command()
 async def new(ctx):
-    await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
-    await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
-    await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
-    await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
-    await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
+    xl = load_workbook('ppyl.xlsx')
+    edit = xl['Sheet1']
+    c1 = str(edit['b1'].value)
+    await ctx.send("https://www.youtube.com/watch?v=" + c1)
+    await ctx.send("https://www.youtube.com/watch?v=" + c1)
+    await ctx.send("https://www.youtube.com/watch?v=" + c1)
+    await ctx.send("https://www.youtube.com/watch?v=" + c1)
 
 
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=60)
 async def panvideoalert():
+    xl = load_workbook('ppyl.xlsx')
+    edit = xl['Sheet1']
+    ytvideos = urllib.request.urlopen('https://www.youtube.com/channel/' + ytid + '/videos')
+    video_ids = re.findall(r"watch\?v=(\S{11})", ytvideos.read().decode())
     edit.cell(row=1, column=2).value = video_ids[0]
     c1 = str(edit['b1'].value)
     c2 = str(edit['b2'].value)
