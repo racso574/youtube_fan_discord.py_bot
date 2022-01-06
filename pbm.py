@@ -11,8 +11,10 @@ import re
 
 load_dotenv()
 
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 key = os.getenv('key')
+
 
 client = discord.Client()
 client = commands.Bot(command_prefix='pan ')
@@ -91,6 +93,7 @@ async def panvideoalert():
     c1 = str(edit['b1'].value)
     c2 = str(edit['b2'].value)
     channel = client.get_channel(id=862830674296832021)
+    id = '@everyone'
     if c1 in c2:
         print('no new video')
         xl.save('ppyl.xlsx')
@@ -99,10 +102,13 @@ async def panvideoalert():
         print("https://www.youtube.com/watch?v=" + c1)
         xl.save('ppyl.xlsx')
         embed = discord.Embed(title="!!!PAN PIANO NEW VIDEO!!!", description=f"Pan Piano just uploaded a new video to his channel")
+        await channel.send(id)
         await channel.send(embed=embed)
         await channel.send("https://www.youtube.com/watch?v=" + c1)
 
 
 client.run(TOKEN)
 
+
+# pbm > v1.1 racso574
 
